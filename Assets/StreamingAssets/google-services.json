@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "420891439018",
+    "project_id": "unity-trpg",
+    "storage_bucket": "unity-trpg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420891439018:android:b1694408a63a5cdf9cc5d3",
+        "android_client_info": {
+          "package_name": "com.anmsg98.trpg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvdHS572g4_rEGY6ZAuMnmDd4FXG2-QE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
