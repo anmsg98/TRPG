@@ -11,20 +11,19 @@ public class TitleScene : MonoBehaviour
     
     void Update()
     {
+        Application.targetFrameRate = 60;
         LoadMainScene();
     }
 
     void LoadMainScene()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount > 0)
         {
-            SceneManager.LoadScene("MainScene");
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                SceneManager.LoadScene("MainScene");
+            }
         }
     }
-
-    void TextFadeInOut()
-    {
-        
-    }
-    
 }

@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Auth;
+using Firebase.Extensions;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class JoinSystem : MonoBehaviour
@@ -17,6 +19,7 @@ public class JoinSystem : MonoBehaviour
     
     void Start()
     {
+        Application.targetFrameRate = 60;
         auth = FirebaseAuth.DefaultInstance;
         messageUI.text = "";
     }
@@ -55,12 +58,12 @@ public class JoinSystem : MonoBehaviour
         string email = id.text;
         string password = pw.text;
 
-        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(
+        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(
             task =>
             {
                 if (!task.IsCanceled && !task.IsFaulted)
                 {
-                    messageUI.text = "회원가입이 완료되었습니다.";
+                    SceneManager.LoadScene("LoginScene");
                 }
                 else
                 {
@@ -68,6 +71,11 @@ public class JoinSystem : MonoBehaviour
                 }
             }
         );
+    }
+
+    public void LoginSceneLoad()
+    {
+        SceneManager.LoadScene("LoginScene");
     }
     
 }
