@@ -31,6 +31,7 @@ public class LoginSystem : MonoBehaviour
             {
                 if (!task.IsCanceled && !task.IsFaulted)
                 {
+                    PlayerInfo.auth = auth;
                     SceneManager.LoadScene("TitleScene");
                 }
                 else
