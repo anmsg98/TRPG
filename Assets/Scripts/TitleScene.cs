@@ -42,7 +42,7 @@ public class TitleScene : MonoBehaviour
                     {
                         if (results[i].gameObject.layer == LayerMask.NameToLayer("BackGround"))
                         {
-                            SceneManager.LoadScene("MenuScene");
+                            SceneManager.LoadScene("GameScene");
                         }
                     }
                 }
@@ -62,7 +62,7 @@ public class TitleScene : MonoBehaviour
                 {
                     if (results[i].gameObject.layer == LayerMask.NameToLayer("BackGround"))
                     {
-                        SceneManager.LoadScene("MenuScene");
+                        SceneManager.LoadScene("GameScene");
                     }
                 }
             }
