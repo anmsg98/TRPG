@@ -6,9 +6,10 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.IO;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class LoginSystem : MonoBehaviour
     
     void Start()
     {
+        CheckData();
         Application.targetFrameRate = 60;
         auth = FirebaseAuth.DefaultInstance;
         LoadLoginSetting();
@@ -57,12 +59,14 @@ public class LoginSystem : MonoBehaviour
 
     public void LoadLoginSetting()
     {
-        string textAsset = Application.streamingAssetsPath + "/Option/SaveEmail.txt";
-        StreamReader reader = new StreamReader(textAsset);
+        string txtFile = Application.persistentDataPath + "/SaveEmail.txt";
+    
+        FileStream filestream = new FileStream(txtFile, FileMode.Open, FileAccess.Read);
+        StreamReader sr = new StreamReader(filestream, System.Text.Encoding.UTF8);
         string line;
-        line = reader.ReadLine();
+        line = sr.ReadLine();
         id.text = line.Split(' ')[1];
-        line = reader.ReadLine();
+        line = sr.ReadLine();
         if (Convert.ToInt32(line.Split(' ')[1]) == 1)
         {
             checkBox = true;
@@ -73,11 +77,13 @@ public class LoginSystem : MonoBehaviour
             checkBox = false;
             checkBoxImg.sprite = Resources.Load<Sprite>("Sprites/checkOff");
         }
-        reader.Close();
+        sr.Close();
+        filestream.Close();
     }
     public void SaveId()
     {
-        string path = Application.streamingAssetsPath + "/Option/SaveEmail.txt";
+        //string path = "Assets/Resources/Option/SaveEmail.txt";
+        string path = Application.persistentDataPath+"/SaveEmail.txt";
         StreamWriter writer = new StreamWriter(path, false);
         if (checkBox)
         {
@@ -103,6 +109,19 @@ public class LoginSystem : MonoBehaviour
         {
             checkBoxImg.sprite = Resources.Load<Sprite>("Sprites/checkOn");
             checkBox = true;
+        }
+    }
+
+    private void CheckData()
+    {
+        string path = Application.persistentDataPath+"/SaveEmail.txt";
+        bool fileExist = File.Exists(path);
+        if (!fileExist) 
+        {
+            StreamWriter writer = new StreamWriter(path, false);
+            writer.WriteLine("ID ");
+            writer.WriteLine("CheckBox 0");
+            writer.Close();
         }
     }
 }
