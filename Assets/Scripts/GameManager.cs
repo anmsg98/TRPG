@@ -18,13 +18,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateCamera();
-    }
-
-    void RotateCamera()
-    {
-        Camera.main.transform.eulerAngles = new Vector3(
-            Camera.main.transform.eulerAngles.x, 360f * cameraToggleSlider.value, Camera.main.transform.eulerAngles.z);
+        //RotateCamera();
     }
     
     public void CameraToggleOn()
