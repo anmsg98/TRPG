@@ -25,7 +25,6 @@ public class FollowCamera : MonoBehaviour
     private void Start()
     {
         transform.position = target.position;
-        Debug.Log("x: " + Screen.width + ", y: " + Screen.height);
     }
 
     private void Update()
@@ -51,45 +50,45 @@ public class FollowCamera : MonoBehaviour
 
     void Move()
     {
-        // // PC 테스트(마우스)
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     click1 = Input.mousePosition;
-        // }
-        //
-        // if (Input.GetMouseButton(0))
-        // {
-        //     if (click1.x / Screen.width > 0.21f)
-        //     {
-        //         click2 = Input.mousePosition;
-        //         movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
-        //         movePos.z = movePos.y;
-        //         movePos.y = 0f;
-        //         transform.Translate(movePos);
-        //         click1 = Input.mousePosition;
-        //     }
-        // }
-        //안드로이드 테스트(터치)
-        if (Input.touchCount == 1)
+        // PC 테스트(마우스)
+        if (Input.GetMouseButtonDown(0))
         {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
+            click1 = Input.mousePosition;
+        }
+        
+        if (Input.GetMouseButton(0))
+        {
+            if (click1.x / Screen.width > 0.21f)
             {
-                click1 = touch.position - touch.deltaPosition;
-            }
-            else if(touch.phase == TouchPhase.Moved)
-            {
-                if (click1.x / Screen.width > 0.21f)
-                {
-                    click2 = touch.position - touch.deltaPosition;
-                    movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
-                    movePos.z = movePos.y;
-                    movePos.y = 0f;
-                    transform.Translate(movePos);
-                    click1 = touch.position - touch.deltaPosition;
-                }
+                click2 = Input.mousePosition;
+                movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
+                movePos.z = movePos.y;
+                movePos.y = 0f;
+                transform.Translate(movePos);
+                click1 = Input.mousePosition;
             }
         }
+        // //안드로이드 테스트(터치)
+        // if (Input.touchCount == 1)
+        // {
+        //     Touch touch = Input.GetTouch(0);
+        //     if (touch.phase == TouchPhase.Began)
+        //     {
+        //         click1 = touch.position - touch.deltaPosition;
+        //     }
+        //     else if(touch.phase == TouchPhase.Moved)
+        //     {
+        //         if (click1.x / Screen.width > 0.21f)
+        //         {
+        //             click2 = touch.position - touch.deltaPosition;
+        //             movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
+        //             movePos.z = movePos.y;
+        //             movePos.y = 0f;
+        //             transform.Translate(movePos);
+        //             click1 = touch.position - touch.deltaPosition;
+        //         }
+        //     }
+        // }
     }
 
     public void targetMove()
