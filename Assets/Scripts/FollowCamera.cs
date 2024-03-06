@@ -36,14 +36,7 @@ public class FollowCamera : MonoBehaviour
     {
         speedText.text = dragspeed.ToString();
         RotateCamera();
-        if (moveOn)
-        {
-            targetMove();
-        }
-        else
-        {
-            Move();
-        }
+        ScreenMove();
     }
 
     private void LateUpdate()
@@ -60,24 +53,36 @@ public class FollowCamera : MonoBehaviour
             0f, 360f * cameraToggleSlider.value, 0f);
     }
 
-    void Move()
+    void ScreenMove()
     {
         // PC 테스트(마우스)
         if (Input.GetMouseButtonDown(0))
         {
-            click1 = Input.mousePosition;
+            if (moveOn)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target.position, camSpeed * Time.deltaTime);
+                print(click1);
+            }
+            else
+            {
+                click1 = Input.mousePosition;
+                print(click1);
+            }
         }
         
         if (Input.GetMouseButton(0))
         {
-            if (click1.x / Screen.width > 0.21f)
+            if (!moveOn)
             {
-                click2 = Input.mousePosition;
-                movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
-                movePos.z = movePos.y;
-                movePos.y = 0f;
-                transform.Translate(movePos);
-                click1 = Input.mousePosition;
+                if (click1.x / Screen.width > 0.21f)
+                {
+                    click2 = Input.mousePosition;
+                    movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
+                    movePos.z = movePos.y;
+                    movePos.y = 0f;
+                    transform.Translate(movePos);
+                    click1 = Input.mousePosition;
+                }
             }
         }
         
@@ -103,12 +108,6 @@ public class FollowCamera : MonoBehaviour
             }
         }
     }
-
-    public void targetMove()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, camSpeed * Time.deltaTime);
-    }
-
     public void SpeedUp()
     {
         dragspeed = Mathf.Clamp(dragspeed + 0.1f, 0.1f, 1f);
