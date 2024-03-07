@@ -42,8 +42,18 @@ public class Player : Entity
                     currentPos = hit.transform.GetComponent<Grid>().currentLoc;
                     m_targetPos = hit.transform.position;
                     m_targetPos.y = 0f;
+                    transform.LookAt(m_targetPos);
                     StartCoroutine(FindRoute.instance.FollowCamera());
                     animator.SetTrigger("Run");
+                }
+                else if (hit.transform.name == "Enemy")
+                {
+                    if (Vector2Int.Distance(hit.transform.GetComponent<Enemy>().currentPos, currentPos) == 1)
+                    {
+                        transform.LookAt(hit.transform.position);
+                        animator.SetTrigger("Attack");
+                        Destroy(hit.transform.gameObject);
+                    }
                 }
             }
         }
@@ -62,14 +72,23 @@ public class Player : Entity
                         currentPos = hit.transform.GetComponent<Grid>().currentLoc;
                         m_targetPos = hit.transform.position;
                         m_targetPos.y = 0f;
+                        transform.LookAt(m_targetPos);
                         StartCoroutine(FindRoute.instance.FollowCamera());
                         animator.SetTrigger("Run");
+                    }
+                    else if (hit.transform.name == "Enemy")
+                    {
+                        if (Vector2Int.Distance(hit.transform.GetComponent<Enemy>().currentPos, currentPos) == 1)
+                        {
+                            transform.LookAt(hit.transform.position);
+                            animator.SetTrigger("Attack");
+                            Destroy(hit.transform.gameObject);
+                        }
                     }
                 }
             }
         }
-
-        transform.LookAt(m_targetPos);
+        
         transform.position = Vector3.SmoothDamp(transform.position,m_targetPos, ref velocity, moveSpeedCoef);
     }
 }

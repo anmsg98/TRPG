@@ -30,6 +30,7 @@ public class FollowCamera : MonoBehaviour
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(gameObject);
+        transform.position = target.position;
     }
 
     private void Update()
@@ -55,37 +56,36 @@ public class FollowCamera : MonoBehaviour
 
     void ScreenMove()
     {
-        // PC 테스트(마우스)
-        if (Input.GetMouseButtonDown(0))
+        if (moveOn)
         {
-            if (moveOn)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, target.position, camSpeed * Time.deltaTime);
-                print(click1);
-            }
-            else
+            transform.position = Vector3.MoveTowards(transform.position, target.position, camSpeed * Time.deltaTime);
+        }
+
+        else
+        {
+            // PC 테스트(마우스)
+            if (Input.GetMouseButtonDown(0))
             {
                 click1 = Input.mousePosition;
-                print(click1);
             }
-        }
-        
-        if (Input.GetMouseButton(0))
-        {
-            if (!moveOn)
+
+            if (Input.GetMouseButton(0))
             {
-                if (click1.x / Screen.width > 0.21f)
+                if (!moveOn)
                 {
-                    click2 = Input.mousePosition;
-                    movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
-                    movePos.z = movePos.y;
-                    movePos.y = 0f;
-                    transform.Translate(movePos);
-                    click1 = Input.mousePosition;
+                    if (click1.x / Screen.width > 0.21f)
+                    {
+                        click2 = Input.mousePosition;
+                        movePos = (Vector3) (click1 - click2) * Time.deltaTime * dragspeed;
+                        movePos.z = movePos.y;
+                        movePos.y = 0f;
+                        transform.Translate(movePos);
+                        click1 = Input.mousePosition;
+                    }
                 }
             }
         }
-        
+
         //안드로이드 테스트(터치)
         if (Input.touchCount == 1)
         {

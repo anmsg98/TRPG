@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class FindRoute : MonoBehaviour
 {
     public static FindRoute instance { get; set; }
-    
+
+    public GameObject enemy;
     public GameObject grid;
     public Transform parent;
     
@@ -46,6 +47,14 @@ public class FindRoute : MonoBehaviour
             for (int j = 0; j < length; j++)
             {
                 map[i, j] = Convert.ToInt32(line[j].ToString());
+                if (map[i, j] == 0)
+                {
+                    GameObject obj = Instantiate(enemy,
+                        new Vector3((j - (length - 1) / 2) * 0.2222f, 0f, ((length - 1) / 2 - i) * 0.2222f),
+                        Quaternion.identity);
+                    obj.transform.GetComponent<Enemy>().currentPos = new Vector2Int(((length - 1) / 2 - i),(j - (length - 1) / 2));
+                    obj.name = "Enemy";
+                }
             }
             line = sr.ReadLine();
         }
@@ -60,7 +69,7 @@ public class FindRoute : MonoBehaviour
         visit = new int[moveDistance * 2 + 1, moveDistance * 2 + 1];
         
         Vector2Int[] queue = new Vector2Int[MAX * MAX];
-        Vector2Int locToindex = new Vector2Int(currentPos.x + (MAX - 1) / 2, currentPos.y + (MAX - 1) / 2);
+        Vector2Int locToindex = new Vector2Int((MAX - 1) / 2 - currentPos.x, currentPos.y + (MAX - 1) / 2);
         
         for (int i = 0; i < moveDistance * 2 + 1; i++)
         {
@@ -76,18 +85,20 @@ public class FindRoute : MonoBehaviour
 
         BFS(moveDistance, moveDistance, queue, moveDistance);
 
+        move[moveDistance, moveDistance] = 2;
         Vector2 pos = new Vector2((10f / 45f * (float)currentPos.y), (10f / 45f * (float)currentPos.x));
         for (int i = 0; i < moveDistance * 2 + 1; i++)
         {
             for (int j = 0; j < moveDistance * 2 + 1; j++)
             {
-                if (move[i, j] > 0 && move[i, j] <= moveDistance + 1)
+                if (move[i, j] > 1 && move[i, j] <= moveDistance + 1)
                 {
                     float r = pos.x + (float)(j - moveDistance) * (10f / 45f);
                     float c = pos.y + (float)(moveDistance - i) * (10f / 45f);
                     GameObject obj = Instantiate(grid, new Vector3(r, -0.1f, c), Quaternion.identity);
                     obj.GetComponent<Grid>().currentLoc =
                         new Vector2Int(currentPos.x + moveDistance - i, currentPos.y + j - moveDistance);
+                    obj.GetComponent<Grid>().distance = move[i, j];
                     obj.transform.parent = parent;
                     obj.name = "Grid";
                 }
