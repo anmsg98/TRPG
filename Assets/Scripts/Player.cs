@@ -6,6 +6,7 @@ public class Player : Entity
 {
     private Vector3 m_targetPos;
     private Vector3 velocity = new Vector3(0f, 0f, 0f);
+    
 
     protected override void Awake()
     {
@@ -16,7 +17,8 @@ public class Player : Entity
     {
         m_targetPos = new Vector3(currentPos.y * 0.2222f, 0f, currentPos.x * 0.2222f);
         transform.position = new Vector3(currentPos.y * 0.2222f, 0f, currentPos.x * 0.2222f);
-        FindRoute.instance.FindDis(currentPos, moveDistnace);
+        FindRoute.instance.map[22 - currentPos.x, currentPos.y + 22] = 0;
+        FindDis();
     }
 
     void Update()
@@ -26,7 +28,7 @@ public class Player : Entity
 
     public void FindDis()
     {
-        FindRoute.instance.FindDis(currentPos, moveDistnace);
+        FindRoute.instance.FindDis(currentPos, moveDistnace,"Player", transform);
     }
     
     void PickObject()
@@ -39,7 +41,9 @@ public class Player : Entity
             {
                 if (hit.transform.name == "Grid")
                 {
+                    FindRoute.instance.map[22 - currentPos.x, currentPos.y + 22] = 1;
                     currentPos = hit.transform.GetComponent<Grid>().currentLoc;
+                    FindRoute.instance.map[22 - currentPos.x, currentPos.y + 22] = 0;
                     m_targetPos = hit.transform.position;
                     m_targetPos.y = 0f;
                     transform.LookAt(m_targetPos);
