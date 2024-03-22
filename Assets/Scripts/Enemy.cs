@@ -18,7 +18,6 @@ public class Enemy : Entity
     void Start()
     {
         m_targetPos = transform.position;
-        StartCoroutine(TickTok());
     }
 
     // Update is called once per frame
@@ -31,15 +30,7 @@ public class Enemy : Entity
     {
         FindRoute.instance.FindDis(currentPos, moveDistnace,"Enemy", transform);
     }
-
-    IEnumerator TickTok()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            yield return new WaitForSeconds(2.0f);
-            FindDis();
-        }
-    }
+    
     public void Move()
     {
         transform.position = Vector3.SmoothDamp(transform.position, m_targetPos, ref velocity, moveSpeedCoef);

@@ -15,9 +15,6 @@ public class FindRoute : MonoBehaviour
 
     public GameObject enemy;
     public GameObject[] grid;
-    public Transform gridParent;
-    public Transform enemyParent;
-    
     private const int MAX = 45;
 
     public int[,] map = new int [MAX, MAX];
@@ -37,7 +34,6 @@ public class FindRoute : MonoBehaviour
 
     void Start()
     {
-        
         LoadMap();
     }
 
@@ -66,7 +62,7 @@ public class FindRoute : MonoBehaviour
                     obj.transform.GetComponent<Enemy>().currentPos = new Vector2Int(((length - 1) / 2 - i),(j - (length - 1) / 2));
                     obj.transform.GetComponent<Enemy>().idx = cnt;
                     obj.name = "Enemy";
-                    obj.transform.parent = enemyParent;
+                    obj.transform.parent = GameManager.instance.enemyParent;
                     cnt++;
                 }
             }
@@ -125,24 +121,28 @@ public class FindRoute : MonoBehaviour
                         obj.GetComponent<Grid>().currentLoc =
                             new Vector2Int(currentPos.x + moveDistance - i, currentPos.y + j - moveDistance);
                         obj.GetComponent<Grid>().distance = move[i, j];
-                        obj.transform.parent = gridParent;
+                        obj.transform.parent = GameManager.instance.gridParent;
                         obj.name = "Grid";
                     }
                     else
                     {
-                        GameObject obj = Instantiate(grid[1], new Vector3(r, -0.1f, c), Quaternion.identity);
-                        obj.GetComponent<Grid>().currentLoc =
-                            new Vector2Int(currentPos.x + moveDistance - i, currentPos.y + j - moveDistance);
-                        obj.GetComponent<Grid>().distance = move[i, j];
-                        obj.transform.parent = gridParent;
-                        obj.name = "EnemyGrid";
+                        // GameObject obj = Instantiate(grid[1], new Vector3(r, -0.1f, c), Quaternion.identity);
+                        // obj.GetComponent<Grid>().currentLoc =
+                        //     new Vector2Int(currentPos.x + moveDistance - i, currentPos.y + j - moveDistance);
+                        // obj.GetComponent<Grid>().distance = move[i, j];
+                        // obj.transform.parent = gridParent;
+                        // obj.name = "EnemyGrid";
                         transform.GetComponent<Enemy>().newPos = new Vector2Int(currentPos.x + moveDistance - i,
                             currentPos.y + j - moveDistance);
                         float dis = Vector2Int.Distance(transform.GetComponent<Enemy>().newPos,
-                            new Vector2Int(0, 0));
+                            Player.instance.currentPos);
                         if (transform.GetComponent<Enemy>().min > dis)
                         {
+                            map[22 - transform.GetComponent<Enemy>().currentPos.x,
+                                transform.GetComponent<Enemy>().currentPos.y + 22] = 1;
                             transform.GetComponent<Enemy>().currentPos = transform.GetComponent<Enemy>().newPos;
+                            map[22 - transform.GetComponent<Enemy>().currentPos.x,
+                                transform.GetComponent<Enemy>().currentPos.y + 22] = 0;
                             transform.GetComponent<Enemy>().min = dis;
                         }
                     }
@@ -192,9 +192,9 @@ public class FindRoute : MonoBehaviour
 
     void DestroyGrid()
     {
-        foreach (Transform child in gridParent)
+        foreach (Transform child in GameManager.instance.gridParent)
         {
-            Destroy(child.gameObject) ;
+            Destroy(child.gameObject);
         }
     }
     
